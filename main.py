@@ -92,8 +92,9 @@ while True:
     print(f"Конкурент --> {nickname} торгует по цене {buy_eth_price + 1}")
     print(f"Можно стать по цене {float(buy_eth_price)}")
     print(f"Зазор - {cur_clearance}")
+    print(f"Откупать USDT по курсу: {buy_usdt_price} выставлять ордер от {user['minSingleTransAmount']} грн.")
     if cur_clearance < user['min_clearance']:
         print(f"Торговать невыгодно, зазор меньше {user['min_clearance']}")
     print('-------------------------------------------')
 
-    time.sleep(1)
+    time.sleep(5)
