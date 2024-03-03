@@ -1,23 +1,23 @@
 import time
 import os
 from User import *
-from check_market import get_ETH_competitor, get_USDT_competitor
-
-
-user = User()
-client = user.create_Client()
-
+from check_market import user, client, get_ETH_competitor, get_USDT_competitor_BUY, get_BTC_competitor
+from ad_controller import updateAdv
 
 eth_competitor = None
 usdt_competitor = None
-rate = float(client.get_symbol_ticker(symbol='ETHUSDT')['price'])
 cur_clearance = None
+
+eth_advNo = 12596886527012540416
+
 
 while True:
     os.system('cls')
 
+    rate = float(client.get_symbol_ticker(symbol='ETHUSDT')['price'])
+
     eth_competitor = get_ETH_competitor(user)
-    usdt_competitor = get_USDT_competitor(user)
+    usdt_competitor = get_USDT_competitor_BUY(user)
 
     nickname = eth_competitor['advertiser']['nickName']
     buy_eth_price = float(eth_competitor['adv']['price']) - 1
@@ -32,4 +32,5 @@ while True:
         print(f"Торговать невыгодно, зазор меньше {user.min_clearance}")
     print('-------------------------------------------')
 
-    time.sleep(5)
+    updateAdv(eth_advNo, buy_eth_price)
+    time.sleep(1)

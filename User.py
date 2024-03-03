@@ -1,12 +1,12 @@
 from binance import Client
 
 config = {
-    'api_Key': '6HC8gJQtWG4UbEVb5usCD8EhuddBkqJ4XJD04JF4j4e03vbt9WMRP3PBXBcOgLoA',
-    'secret_Key': 'q1jfzQ77JvLtCmlMtBG7ynNySoz1sPO42sWTXQ3G9m4gncDiUg4bEll8vyJYpdG0',
-    'userNo': 'se6a51d75f40c33c6a595377d66227984',
+    'api_Key': "AoqvN7WPJiM5LEEgWPHkuxrxUTaYHFPaMI4kfsHujjnuNVhMgJj0oleh75LCN0Tt",
+    'secret_Key': "0EQjIMAgmMwc17NaWGbCuUiTtnYDhMWhc7ifwulWmLgcquzU2twQTRdQ6I3zWebh",
+    'userNo': 's010efcdd9ed73afca5735774d437ecbd',
     'minSingleTransAmount': 5000,
-    'maxSingleTransAmount': 75000,
-    'min_clearance': 0.4
+    'maxSingleTransAmount': 30000,
+    'min_clearance': 0.8
 }
 
 
