@@ -6,7 +6,7 @@ config = {
     'userNo': 's010efcdd9ed73afca5735774d437ecbd',
     'minSingleTransAmount': 5000,
     'maxSingleTransAmount': 30000,
-    'min_clearance': 0.8
+    'min_clearance': 0.95
 }
 
 
