@@ -1,6 +1,5 @@
 import time
 import os
-from User import *
 from check_market import *
 from ad_controller import updateAdv
 
