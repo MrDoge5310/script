@@ -45,6 +45,7 @@ def get_ETH_competitor(user):
                 and adv_max - user.minSingleTransAmount >= 5000
                 and adv['advertiser']['userNo'] != user.userNo
                 and cur_clearance > user.min_clearance):
+            print(f"Зазор ETH--> {cur_clearance}")
             return adv
         else:
             pass
@@ -129,6 +130,7 @@ def get_BTC_competitor(user):
                 and adv_max - user.minSingleTransAmount >= 5000
                 and adv['advertiser']['userNo'] != user.userNo
                 and cur_clearance > user.min_clearance):
+            print(f"Зазор BTC--> {cur_clearance}")
             return adv
         else:
             pass
