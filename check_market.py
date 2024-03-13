@@ -13,7 +13,7 @@ def get_ETH_competitor(user):
         "fiat": "UAH",
         "page": 1,
         "rows": 20,
-        "transAmount": user.minSingleTransAmount,
+        "transAmount": user.maxSingleTransAmount,
         "tradeType": "BUY",
         "asset": "ETH",
         "countries": [],
@@ -40,9 +40,8 @@ def get_ETH_competitor(user):
 
         cur_clearance = float(adv['adv']['price']) / rate - buy_usdt_price
 
-        if (user.maxSingleTransAmount < adv_max + 10000
+        if (user.minSingleTransAmount <= adv_max
                 and adv_max - adv_min >= 4000
-                and adv_max - user.minSingleTransAmount >= 5000
                 and adv['advertiser']['userNo'] != user.userNo
                 and cur_clearance > user.min_clearance):
             print(f"Зазор ETH--> {cur_clearance}")
@@ -98,7 +97,7 @@ def get_BTC_competitor(user):
         "fiat": "UAH",
         "page": 1,
         "rows": 20,
-        "transAmount": user.minSingleTransAmount,
+        "transAmount": user.maxSingleTransAmount,
         "tradeType": "BUY",
         "asset": "BTC",
         "countries": [],
@@ -125,9 +124,8 @@ def get_BTC_competitor(user):
 
         cur_clearance = float(adv['adv']['price']) / rate - buy_usdt_price
 
-        if (user.maxSingleTransAmount < adv_max + 10000
+        if (user.minSingleTransAmount <= adv_max
                 and adv_max - adv_min >= 4000
-                and adv_max - user.minSingleTransAmount >= 5000
                 and adv['advertiser']['userNo'] != user.userNo
                 and cur_clearance > user.min_clearance):
             print(f"Зазор BTC--> {cur_clearance}")

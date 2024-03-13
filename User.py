@@ -5,8 +5,8 @@ config = {
     'secret_Key': "0EQjIMAgmMwc17NaWGbCuUiTtnYDhMWhc7ifwulWmLgcquzU2twQTRdQ6I3zWebh",
     'userNo': 's010efcdd9ed73afca5735774d437ecbd',
     'minSingleTransAmount': 5000,
-    'maxSingleTransAmount': 30000,
-    'min_clearance': 0.95
+    'maxSingleTransAmount': 50000,
+    'min_clearance': 1.5
 }
 
 
