@@ -1,0 +1,8 @@
+{"api_Key": "AoqvN7WPJiM5LEEgWPHkuxrxUTaYHFPaMI4kfsHujjnuNVhMgJj0oleh75LCN0Tt",
+  "secret_Key": "0EQjIMAgmMwc17NaWGbCuUiTtnYDhMWhc7ifwulWmLgcquzU2twQTRdQ6I3zWebh",
+  "userNo": "s010efcdd9ed73afca5735774d437ecbd",
+  "eth_advNo": 12606023484495142912,
+  "btc_advNo": 12606022881931583488,
+  "minSingleTransAmount": 5000,
+  "maxSingleTransAmount": 50000,
+  "min_clearance": 1.2}

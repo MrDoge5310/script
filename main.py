@@ -1,34 +1,60 @@
 import time
-import os
-from check_market import *
+from User import User
+import json
+from check_market import get_USDT_competitor, get_BTC_competitor, get_ETH_competitor
 from ad_controller import updateAdv
-
-eth_competitor = None
-usdt_competitor = None
-cur_clearance = None
-
-eth_advNo = 12596886527012540416
-btc_advNo = 12597735618799038464
+# from window_layout import app, MainWindow
 
 
-while True:
-    os.system('cls')
+class Script:
+    def __init__(self, user_):
+        self.user = user_
+        self.client = user_.client
 
-    eth_competitor = get_ETH_competitor(user)
-    btc_competitor = get_BTC_competitor(user)
-    usdt_competitor = get_USDT_competitor_BUY(user)
+        self.running = True
+        self.btc_active = True
+        self.eth_active = True
 
-    buy_eth_price = float(eth_competitor['adv']['price']) - 1
-    buy_btc_price = float(btc_competitor['adv']['price']) - 1
+        self.sell_btc_price = None
+        self.sell_eth_price = None
+        self.buy_usdt_price = None
 
-    nickname = eth_competitor['advertiser']['nickName']
+        self.btc_competitor = None
+        self.eth_competitor = None
+        self.usdt_competitor = None
 
-    buy_usdt_price = round(float(usdt_competitor['adv']['price']) + 0.01, 2)
+    def get_competitors(self):
+        self.usdt_competitor = get_USDT_competitor(self.user)
 
-    print(f"Конкурент --> {nickname} торгует по цене {buy_eth_price + 1}")
-    print(f"Откупать USDT по курсу: {buy_usdt_price} выставлять ордер от {user.minSingleTransAmount} грн.")
+        if self.btc_active:
+            self.btc_competitor = get_BTC_competitor(self.user, self.usdt_competitor)
+            self.sell_btc_price = float(self.btc_competitor['adv']['price']) - 1
 
-    updateAdv(eth_advNo, buy_eth_price)
-    updateAdv(btc_advNo, buy_btc_price)
+        if self.eth_active:
+            self.eth_competitor = get_ETH_competitor(self.user, self.usdt_competitor)
+            self.sell_eth_price = float(self.eth_competitor['adv']['price']) - 1
 
-    time.sleep(1)
+    def updateAds(self):
+        if self.btc_active:
+            updateAdv(self.user, self.user.btc_advNo, self.sell_btc_price)
+
+        if self.eth_active:
+            updateAdv(self.user, self.user.eth_advNo, self.sell_eth_price)
+
+    def run(self):
+        self.get_competitors()
+        self.updateAds()
+
+
+with open('config.json', 'r') as file:
+    config = json.load(file)
+
+
+user = User(config)
+script = Script(user)
+
+while script.running:
+    script.run()
+    time.sleep(1.5)
+
+

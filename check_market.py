@@ -4,32 +4,30 @@ from User import User
 
 
 link = 'https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search'
-user = User()
-client = user.create_Client()
-
-
-def get_ETH_competitor(user):
-    params = {
+params = {
         "fiat": "UAH",
         "page": 1,
         "rows": 20,
-        "transAmount": user.maxSingleTransAmount,
         "tradeType": "BUY",
-        "asset": "ETH",
         "countries": [],
         "proMerchantAds": False,
         "shieldMerchantAds": False,
         "publisherType": 'merchant',
-        "payTypes": ['Monobank'],
+        "payTypes": ['Monobank', 'PrivatBank'],
         "classifies": ["mass", "profession"]
     }
+
+
+def get_ETH_competitor(user, usdt_competitor):
+    params['asset'] = "ETH"
+    params['transAmount'] = None
+    params["tradeType"] = "BUY"
 
     response = requests.post(link, headers=user.headers, json=params).json()
     advertisements = response['data']
 
-    usdt_competitor = get_USDT_competitor_BUY(user)
     buy_usdt_price = round(float(usdt_competitor['adv']['price']) - 0.01)
-    rate = float(client.get_symbol_ticker(symbol='ETHUSDT')['price'])
+    rate = float(user.client.get_symbol_ticker(symbol='ETHUSDT')['price'])
 
     for adv in advertisements:
         adv_max_cur = float(adv['adv']['tradableQuantity']) * float(adv['adv']['price'])
@@ -40,38 +38,28 @@ def get_ETH_competitor(user):
 
         cur_clearance = float(adv['adv']['price']) / rate - buy_usdt_price
 
-        if (user.minSingleTransAmount <= adv_max
+        if (user.minSingleTransAmount + 5000 <= adv_max
+                and user.maxSingleTransAmount > adv_min
                 and adv_max - adv_min >= 4000
                 and adv['advertiser']['userNo'] != user.userNo
                 and cur_clearance > user.min_clearance):
-            print(f"Зазор ETH--> {cur_clearance}")
+            print(f"Зазор ETH--> {round(cur_clearance, 2)} UAH --> {round(cur_clearance * 2.3, 2)}%")
+            print(adv['advertiser']['nickName'])
             return adv
         else:
             pass
 
 
-def get_BNB_competitor(user):
-    params = {
-        "fiat": "UAH",
-        "page": 1,
-        "rows": 20,
-        "transAmount": user.minSingleTransAmount,
-        "tradeType": "BUY",
-        "asset": "BNB",
-        "countries": [],
-        "proMerchantAds": False,
-        "shieldMerchantAds": False,
-        "publisherType": 'merchant',
-        "payTypes": ['Monobank'],
-        "classifies": ["mass", "profession"]
-    }
+def get_BTC_competitor(user, usdt_competitor):
+    params['asset'] = "BTC"
+    params['transAmount'] = None
+    params["tradeType"] = "BUY"
 
     response = requests.post(link, headers=user.headers, json=params).json()
     advertisements = response['data']
 
-    usdt_competitor = get_USDT_competitor_BUY(user)
     buy_usdt_price = round(float(usdt_competitor['adv']['price']) - 0.01)
-    rate = float(client.get_symbol_ticker(symbol='BNBUSDT')['price'])
+    rate = float(user.client.get_symbol_ticker(symbol='BTCUSDT')['price'])
 
     for adv in advertisements:
         adv_max_cur = float(adv['adv']['tradableQuantity']) * float(adv['adv']['price'])
@@ -82,76 +70,28 @@ def get_BNB_competitor(user):
 
         cur_clearance = float(adv['adv']['price']) / rate - buy_usdt_price
 
-        if (user.maxSingleTransAmount < adv_max + 10000
+        if (user.minSingleTransAmount + 5000 <= adv_max
+                and user.maxSingleTransAmount > adv_min
                 and adv_max - adv_min >= 4000
-                and adv_max - user.minSingleTransAmount >= 5000
                 and adv['advertiser']['userNo'] != user.userNo
                 and cur_clearance > user.min_clearance):
+            print(f"Зазор BTC--> {round(cur_clearance, 2)} UAH --> {round(cur_clearance * 2.3, 2)}%")
+            print(adv['advertiser']['nickName'])
             return adv
         else:
             pass
 
 
-def get_BTC_competitor(user):
-    params = {
-        "fiat": "UAH",
-        "page": 1,
-        "rows": 20,
-        "transAmount": user.maxSingleTransAmount,
-        "tradeType": "BUY",
-        "asset": "BTC",
-        "countries": [],
-        "proMerchantAds": False,
-        "shieldMerchantAds": False,
-        "publisherType": 'merchant',
-        "payTypes": ['Monobank'],
-        "classifies": ["mass", "profession"]
-    }
+def get_USDT_competitor(user):
+    params['asset'] = "USDT"
+    params['transAmount'] = 20000
+    params["tradeType"] = "SELL"
+    params["payTypes"] = ['Monobank']
 
     response = requests.post(link, headers=user.headers, json=params).json()
     advertisements = response['data']
 
-    usdt_competitor = get_USDT_competitor_BUY(user)
-    buy_usdt_price = round(float(usdt_competitor['adv']['price']) - 0.01)
-    rate = float(client.get_symbol_ticker(symbol='BTCUSDT')['price'])
-
-    for adv in advertisements:
-        adv_max_cur = float(adv['adv']['tradableQuantity']) * float(adv['adv']['price'])
-        adv_max = float(adv['adv']['maxSingleTransAmount'])
-        if adv_max_cur < adv_max:
-            adv_max = adv_max_cur
-        adv_min = float(adv['adv']['minSingleTransAmount'])
-
-        cur_clearance = float(adv['adv']['price']) / rate - buy_usdt_price
-
-        if (user.minSingleTransAmount <= adv_max
-                and adv_max - adv_min >= 4000
-                and adv['advertiser']['userNo'] != user.userNo
-                and cur_clearance > user.min_clearance):
-            print(f"Зазор BTC--> {cur_clearance}")
-            return adv
-        else:
-            pass
-
-
-def get_USDT_competitor_BUY(user):
-    params = {
-        "fiat": "UAH",
-        "page": 1,
-        "rows": 20,
-        "transAmount": user.minSingleTransAmount,
-        "tradeType": "Sell",
-        "asset": "USDT",
-        "countries": [],
-        "proMerchantAds": False,
-        "shieldMerchantAds": False,
-        "publisherType": 'merchant',
-        "payTypes": ['Monobank'],
-        "classifies": ["mass", "profession"]
-    }
-
-    response = requests.post(link, headers=user.headers, json=params).json()
-    advertisements = response['data']
+    params["payTypes"] = ['Monobank', 'PrivatBank']
 
     for adv in advertisements:
         adv_max_cur = float(adv['adv']['tradableQuantity']) * float(adv['adv']['price'])
@@ -164,34 +104,7 @@ def get_USDT_competitor_BUY(user):
                 and adv_max - adv_min >= 4000
                 and adv_max - user.minSingleTransAmount >= 5000
                 and adv['advertiser']['userNo'] != user.userNo):
-            return adv
-        else:
-            pass
-
-
-def get_USDT_competitor_SELL(user):
-    params = {
-        "fiat": "UAH",
-        "page": 1,
-        "rows": 20,
-        "transAmount": '10000',
-        "tradeType": "SELL",
-        "asset": "USDT",
-        "countries": [],
-        "proMerchantAds": False,
-        "shieldMerchantAds": False,
-        "publisherType": 'merchant',
-        "payTypes": ['A-Bank'],
-        "classifies": ["mass", "profession"]
-    }
-
-    response = requests.post(link, headers=user.headers, json=params).json()
-    advertisements = response['data']
-
-    for adv in advertisements:
-        if (user.minSingleTransAmount <= float(adv['adv']['maxSingleTransAmount'])
-                and float(adv['adv']['maxSingleTransAmount']) - float(adv['adv']['minSingleTransAmount']) >= 5000
-                and adv['advertiser']['userNo'] != user.userNo):
+            print(adv['advertiser']['nickName'], "-->", round(float(adv['adv']['price']) + 0.01, 2))
             return adv
         else:
             pass
