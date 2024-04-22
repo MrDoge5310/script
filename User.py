@@ -13,7 +13,8 @@ class User:
 
         self.minSingleTransAmount = config['minSingleTransAmount']
         self.maxSingleTransAmount = config['maxSingleTransAmount']
-        self.min_clearance = config['min_clearance']
+        self.min_clearance_eth = config['min_clearance_eth']
+        self.min_clearance_btc = config['min_clearance_btc']
         self.headers = {
             'accept': '*/*',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '

@@ -13,7 +13,7 @@ params = {
         "proMerchantAds": False,
         "shieldMerchantAds": False,
         "publisherType": 'merchant',
-        "payTypes": ['Monobank', 'PrivatBank'],
+        "payTypes": ['Monobank', "PrivatBank"],
         "classifies": ["mass", "profession"]
     }
 
@@ -42,7 +42,7 @@ def get_ETH_competitor(user, usdt_competitor):
                 and user.maxSingleTransAmount > adv_min
                 and adv_max - adv_min >= 4000
                 and adv['advertiser']['userNo'] != user.userNo
-                and cur_clearance > user.min_clearance):
+                and cur_clearance > user.min_clearance_eth):
             print(f"Зазор ETH--> {round(cur_clearance, 2)} UAH --> {round(cur_clearance * 2.3, 2)}%")
             print(adv['advertiser']['nickName'])
             return adv
@@ -74,7 +74,7 @@ def get_BTC_competitor(user, usdt_competitor):
                 and user.maxSingleTransAmount > adv_min
                 and adv_max - adv_min >= 4000
                 and adv['advertiser']['userNo'] != user.userNo
-                and cur_clearance > user.min_clearance):
+                and cur_clearance > user.min_clearance_btc):
             print(f"Зазор BTC--> {round(cur_clearance, 2)} UAH --> {round(cur_clearance * 2.3, 2)}%")
             print(adv['advertiser']['nickName'])
             return adv
@@ -91,7 +91,7 @@ def get_USDT_competitor(user):
     response = requests.post(link, headers=user.headers, json=params).json()
     advertisements = response['data']
 
-    params["payTypes"] = ['Monobank', 'PrivatBank']
+    params["payTypes"] = ['Monobank']
 
     for adv in advertisements:
         adv_max_cur = float(adv['adv']['tradableQuantity']) * float(adv['adv']['price'])
@@ -100,8 +100,7 @@ def get_USDT_competitor(user):
             adv_max = adv_max_cur
         adv_min = float(adv['adv']['minSingleTransAmount'])
 
-        if (user.maxSingleTransAmount < adv_max + 10000
-                and adv_max - adv_min >= 4000
+        if (adv_max - adv_min >= 4000
                 and adv_max - user.minSingleTransAmount >= 5000
                 and adv['advertiser']['userNo'] != user.userNo):
             print(adv['advertiser']['nickName'], "-->", round(float(adv['adv']['price']) + 0.01, 2))

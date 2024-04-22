@@ -10,7 +10,7 @@ endpoint = "/sapi/v1/c2c/ads/update"
 
 
 def generateSignaturedUrl(params, api_secret_ex):
-    timestamp = int(time.time() * 1000) + 10000
+    timestamp = int(time.time() * 1000) + 40000
     query_string = urlencode(params)
     # replace single quote to double quote
     query_string = query_string.replace("%27", "%22")
