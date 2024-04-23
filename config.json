@@ -1,9 +1,9 @@
 {"api_Key": "AoqvN7WPJiM5LEEgWPHkuxrxUTaYHFPaMI4kfsHujjnuNVhMgJj0oleh75LCN0Tt",
   "secret_Key": "0EQjIMAgmMwc17NaWGbCuUiTtnYDhMWhc7ifwulWmLgcquzU2twQTRdQ6I3zWebh",
   "userNo": "s010efcdd9ed73afca5735774d437ecbd",
-  "eth_advNo": "12614175364972281856",
-  "btc_advNo": "12614174798413287425",
-  "minSingleTransAmount": 40000,
+  "eth_advNo": "12615762562406215680",
+  "btc_advNo": "12615762426363367424",
+  "minSingleTransAmount": 5000,
   "maxSingleTransAmount": 50000,
   "min_clearance_btc": 1,
-  "min_clearance_eth": 2}
+  "min_clearance_eth": 1}
