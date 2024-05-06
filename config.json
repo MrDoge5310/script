@@ -5,5 +5,5 @@
   "btc_advNo": "12615762426363367424",
   "minSingleTransAmount": 5000,
   "maxSingleTransAmount": 50000,
-  "min_clearance_btc": 1,
+  "min_clearance_btc": 0.8,
   "min_clearance_eth": 1}

@@ -3,6 +3,7 @@ from User import User
 import json
 from check_market import get_USDT_competitor, get_BTC_competitor, get_ETH_competitor
 from ad_controller import updateAdv
+from binance import ThreadedWebsocketManager
 # from window_layout import app, MainWindow
 
 
@@ -55,6 +56,4 @@ script = Script(user)
 
 while script.running:
     script.run()
-    time.sleep(1.5)
-
-
+    time.sleep(1.2)

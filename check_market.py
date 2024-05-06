@@ -42,7 +42,7 @@ def get_ETH_competitor(user, usdt_competitor):
                 and user.maxSingleTransAmount > adv_min
                 and adv_max - adv_min >= 4000
                 and adv['advertiser']['userNo'] != user.userNo
-                and adv['advertiser']['userNo'] != 'se6a51d75f40c33c6a595377d66227984'
+                #and adv['advertiser']['userNo'] != 'se6a51d75f40c33c6a595377d66227984'
                 and cur_clearance > user.min_clearance_eth):
             print(f"Зазор ETH--> {round(cur_clearance, 2)} UAH --> {round(cur_clearance * 2.3, 2)}%")
             print(adv['advertiser']['nickName'])
@@ -75,7 +75,7 @@ def get_BTC_competitor(user, usdt_competitor):
                 and user.maxSingleTransAmount > adv_min
                 and adv_max - adv_min >= 4000
                 and adv['advertiser']['userNo'] != user.userNo
-                and adv['advertiser']['userNo'] != 'se6a51d75f40c33c6a595377d66227984'
+                #and adv['advertiser']['userNo'] != 'se6a51d75f40c33c6a595377d66227984'
                 and cur_clearance > user.min_clearance_btc):
             print(f"Зазор BTC--> {round(cur_clearance, 2)} UAH --> {round(cur_clearance * 2.3, 2)}%")
             print(adv['advertiser']['nickName'])
