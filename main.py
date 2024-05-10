@@ -3,6 +3,8 @@ from User import User
 import json
 from check_market import get_USDT_competitor, get_BTC_competitor, get_ETH_competitor
 from ad_controller import updateAdv
+import asyncio
+import os
 from binance import ThreadedWebsocketManager
 # from window_layout import app, MainWindow
 
@@ -24,27 +26,34 @@ class Script:
         self.eth_competitor = None
         self.usdt_competitor = None
 
-    def get_competitors(self):
+    async def get_competitor(self):
         self.usdt_competitor = get_USDT_competitor(self.user)
 
+    async def get_btc_competitor(self):
+        self.btc_competitor = get_BTC_competitor(self.user, self.usdt_competitor)
+
+    async def get_eth_competitor(self):
+        self.eth_competitor = get_ETH_competitor(self.user, self.usdt_competitor)
+
+    async def update_btc_adv(self):
         if self.btc_active:
-            self.btc_competitor = get_BTC_competitor(self.user, self.usdt_competitor)
-            self.sell_btc_price = float(self.btc_competitor['adv']['price']) - 1
+            await self.get_btc_competitor()
+            self.sell_btc_price = float(self.btc_competitor['adv']['price']) - 1.01
+            await updateAdv(self.user, self.user.btc_advNo, self.sell_btc_price)
 
+    async def update_eth_adv(self):
         if self.eth_active:
-            self.eth_competitor = get_ETH_competitor(self.user, self.usdt_competitor)
-            self.sell_eth_price = float(self.eth_competitor['adv']['price']) - 1
+            await self.get_eth_competitor()
+            self.sell_eth_price = float(self.eth_competitor['adv']['price']) - 1.01
+            await updateAdv(self.user, self.user.eth_advNo, self.sell_eth_price)
 
-    def updateAds(self):
-        if self.btc_active:
-            updateAdv(self.user, self.user.btc_advNo, self.sell_btc_price)
+    async def run(self):
+        await self.get_competitor()
+        # task2 = asyncio.create_task(self.update_eth_adv())
+        # task3 = asyncio.create_task(self.update_btc_adv())
+        await asyncio.gather(self.update_btc_adv(), self.update_eth_adv())
 
-        if self.eth_active:
-            updateAdv(self.user, self.user.eth_advNo, self.sell_eth_price)
-
-    def run(self):
-        self.get_competitors()
-        self.updateAds()
+        await asyncio.sleep(0)
 
 
 with open('config.json', 'r') as file:
@@ -55,5 +64,5 @@ user = User(config)
 script = Script(user)
 
 while script.running:
-    script.run()
-    time.sleep(1.2)
+    os.system('cls')
+    asyncio.run(script.run())

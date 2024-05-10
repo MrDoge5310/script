@@ -4,6 +4,7 @@ import hashlib
 import hmac
 from urllib.parse import urlencode
 import time
+import asyncio
 
 base_url = "https://api.binance.com"
 endpoint = "/sapi/v1/c2c/ads/update"
@@ -29,7 +30,7 @@ def generateSignaturedUrl(params, api_secret_ex):
     return signature, url
 
 
-def updateAdv(user, advNo, price):
+async def updateAdv(user, advNo, price):
     param = {"advNo": advNo, "price": price}
 
     headers = {"Content-Type": "application/json;charset=utf-8",
@@ -40,6 +41,7 @@ def updateAdv(user, advNo, price):
     try:
         response = requests.post(url, headers=headers, data=json.dumps(param))
         data = response.json()
-        print(data)
+        print("Статус обновления: " + data['message'])
+        print("---------------------")
     except:
         print("Ошибка отправки запроса")
