@@ -11,6 +11,9 @@ class User:
         self.eth_advNo = config['eth_advNo']
         self.btc_advNo = config['btc_advNo']
 
+        self.eth_rate = float(self.client.get_symbol_ticker(symbol='ETHUSDT')['price'])
+        self.btc_rate = float(self.client.get_symbol_ticker(symbol='BTCUSDT')['price'])
+
         self.minSingleTransAmount = config['minSingleTransAmount']
         self.maxSingleTransAmount = config['maxSingleTransAmount']
         self.min_clearance_eth = config['min_clearance_eth']

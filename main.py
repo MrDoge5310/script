@@ -1,12 +1,9 @@
-import time
 from User import User
 import json
 from check_market import get_USDT_competitor, get_BTC_competitor, get_ETH_competitor
 from ad_controller import updateAdv
 import asyncio
 import os
-from binance import ThreadedWebsocketManager
-# from window_layout import app, MainWindow
 
 
 class Script:
@@ -53,7 +50,7 @@ class Script:
         # task3 = asyncio.create_task(self.update_btc_adv())
         await asyncio.gather(self.update_btc_adv(), self.update_eth_adv())
 
-        await asyncio.sleep(0)
+        await asyncio.sleep(0.5)
 
 
 with open('config.json', 'r') as file:

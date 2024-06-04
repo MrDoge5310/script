@@ -2,7 +2,7 @@
   "secret_Key": "0EQjIMAgmMwc17NaWGbCuUiTtnYDhMWhc7ifwulWmLgcquzU2twQTRdQ6I3zWebh",
   "userNo": "s010efcdd9ed73afca5735774d437ecbd",
   "eth_advNo": "12615762562406215680",
-  "btc_advNo": "12615762426363367424",
+  "btc_advNo": "12623232615763369984",
   "minSingleTransAmount": 2000,
   "maxSingleTransAmount": 50000,
   "min_clearance_btc": 0.8,

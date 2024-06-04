@@ -1,5 +1,4 @@
 import requests
-import asyncio
 
 
 link = 'https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search'
@@ -26,7 +25,11 @@ def get_ETH_competitor(user, usdt_competitor):
     advertisements = response['data']
 
     buy_usdt_price = round(float(usdt_competitor['adv']['price']) + 0.01, 2)
-    rate = float(user.client.get_symbol_ticker(symbol='ETHUSDT')['price'])
+    try:
+        rate = float(user.client.get_symbol_ticker(symbol='ETHUSDT')['price'])
+        user.eth_rate = rate
+    except:
+        rate = user.eth_rate
 
     for adv in advertisements:
         adv_max_cur = float(adv['adv']['tradableQuantity']) * float(adv['adv']['price'])
@@ -41,9 +44,8 @@ def get_ETH_competitor(user, usdt_competitor):
                 and user.maxSingleTransAmount > adv_min
                 and adv_max - adv_min >= 4000
                 and adv['advertiser']['userNo'] != user.userNo
-                #and adv['advertiser']['userNo'] != 'se6a51d75f40c33c6a595377d66227984'
                 and cur_clearance > user.min_clearance_eth):
-            print(f"Зазор ETH--> {round(cur_clearance, 2)} UAH --> {round(cur_clearance / 0.4, 2)}% --> {adv['advertiser']['nickName']}")
+            print(f"Спред ETH--> {round(cur_clearance, 2)} UAH --> {round(cur_clearance / 0.4, 2)}% --> {adv['advertiser']['nickName']}")
             return adv
         else:
             pass
@@ -58,7 +60,11 @@ def get_BTC_competitor(user, usdt_competitor):
     advertisements = response['data']
 
     buy_usdt_price = round(float(usdt_competitor['adv']['price']) + 0.01, 2)
-    rate = float(user.client.get_symbol_ticker(symbol='BTCUSDT')['price'])
+    try:
+        rate = float(user.client.get_symbol_ticker(symbol='BTCUSDT')['price'])
+        user.btc_rate = rate
+    except:
+        rate = user.btc_rate
 
     for adv in advertisements:
         adv_max_cur = float(adv['adv']['tradableQuantity']) * float(adv['adv']['price'])
@@ -73,9 +79,8 @@ def get_BTC_competitor(user, usdt_competitor):
                 and user.maxSingleTransAmount > adv_min
                 and adv_max - adv_min >= 4000
                 and adv['advertiser']['userNo'] != user.userNo
-                #and adv['advertiser']['userNo'] != 'se6a51d75f40c33c6a595377d66227984'
                 and cur_clearance > user.min_clearance_btc):
-            print(f"Зазор BTC--> {round(cur_clearance, 2)} UAH --> {round(cur_clearance / 0.4, 2)}% --> {adv['advertiser']['nickName']}")
+            print(f"Спред BTC--> {round(cur_clearance, 2)} UAH --> {round(cur_clearance / 0.4, 2)}% --> {adv['advertiser']['nickName']}")
             return adv
         else:
             pass
