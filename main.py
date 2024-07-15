@@ -53,7 +53,9 @@ class Script:
         await asyncio.sleep(0.5)
 
 
-with open('config.json', 'r') as file:
+path = os.path.abspath("config.json")
+
+with open(path, 'r') as file:
     config = json.load(file)
 
 
