@@ -85,6 +85,41 @@ def get_BTC_competitor(user, usdt_competitor):
         else:
             pass
 
+def get_TRUMP_competitor(user, usdt_competitor):
+    params['asset'] = "TRUMP"
+    params['transAmount'] = None
+    params["tradeType"] = "BUY"
+
+    response = requests.post(link, headers=user.headers, json=params).json()
+    advertisements = response['data']
+
+    buy_usdt_price = round(float(usdt_competitor['adv']['price']) + 0.01, 2)
+    try:
+        rate = float(user.client.get_symbol_ticker(symbol='TRUMPUSDT')['price'])
+        user.trump_rate = rate
+    except:
+        rate = user.trump_rate
+
+    for adv in advertisements:
+        adv_max_cur = float(adv['adv']['tradableQuantity']) * float(adv['adv']['price'])
+        adv_max = float(adv['adv']['maxSingleTransAmount'])
+        if adv_max_cur < adv_max:
+            adv_max = adv_max_cur
+        adv_min = float(adv['adv']['minSingleTransAmount'])
+
+        cur_clearance = float(adv['adv']['price']) / rate - buy_usdt_price
+
+        if (user.minSingleTransAmount + 5000 <= adv_max
+                and user.maxSingleTransAmount > adv_min
+                and adv_max - adv_min >= 4000
+                and float(adv['adv']['maxSingleTransAmount']) > 10000
+                and adv['advertiser']['userNo'] != user.userNo
+                and cur_clearance > user.min_clearance_trump):
+            print(f"Спред TRUMP--> {round(cur_clearance, 2)} UAH --> {round(cur_clearance / 0.4, 2)}% --> {adv['advertiser']['nickName']}")
+            return adv
+        else:
+            pass
+
 
 def get_USDT_competitor(user):
     params['asset'] = "USDT"
