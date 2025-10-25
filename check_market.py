@@ -38,6 +38,8 @@ def get_ETH_competitor(user, usdt_competitor):
             adv_max = adv_max_cur
         adv_min = float(adv['adv']['minSingleTransAmount'])
 
+        competitor = None
+
         cur_clearance = float(adv['adv']['price']) / rate - buy_usdt_price
 
         if (user.minSingleTransAmount + 5000 <= adv_max
@@ -46,9 +48,13 @@ def get_ETH_competitor(user, usdt_competitor):
                 and adv['advertiser']['userNo'] != user.userNo
                 and cur_clearance > user.min_clearance_eth):
             print(f"Спред ETH--> {round(cur_clearance, 2)} UAH --> {round(cur_clearance / 0.4, 2)}% --> {adv['advertiser']['nickName']}")
-            return adv
+            competitor = adv
         else:
             pass
+
+        if competitor is None:
+            competitor = advertisements[-1]
+        return competitor
 
 
 def get_BTC_competitor(user, usdt_competitor):
@@ -66,12 +72,15 @@ def get_BTC_competitor(user, usdt_competitor):
     except:
         rate = user.btc_rate
 
+
     for adv in advertisements:
         adv_max_cur = float(adv['adv']['tradableQuantity']) * float(adv['adv']['price'])
         adv_max = float(adv['adv']['maxSingleTransAmount'])
         if adv_max_cur < adv_max:
             adv_max = adv_max_cur
         adv_min = float(adv['adv']['minSingleTransAmount'])
+
+        competitor = None
 
         cur_clearance = float(adv['adv']['price']) / rate - buy_usdt_price
 
@@ -81,9 +90,14 @@ def get_BTC_competitor(user, usdt_competitor):
                 and adv['advertiser']['userNo'] != user.userNo
                 and cur_clearance > user.min_clearance_btc):
             print(f"Спред BTC--> {round(cur_clearance, 2)} UAH --> {round(cur_clearance / 0.4, 2)}% --> {adv['advertiser']['nickName']}")
-            return adv
+            competitor = adv
         else:
             pass
+
+        if competitor is None:
+            competitor = advertisements[-1]
+        return competitor
+
 
 def get_TRUMP_competitor(user, usdt_competitor):
     params['asset'] = "TRUMP"

@@ -16,6 +16,9 @@ class User:
         self.btc_rate = float(self.client.get_symbol_ticker(symbol='BTCUSDT')['price'])
         self.trump_rate = float(self.client.get_symbol_ticker(symbol='TRUMPUSDT')['price'])
 
+        self.eth_min_rate = config["eth_min"]
+        self.btc_min_rate = config["btc_min"]
+
         self.minSingleTransAmount = config['minSingleTransAmount']
         self.maxSingleTransAmount = config['maxSingleTransAmount']
         self.min_clearance_eth = config['min_clearance_eth']
